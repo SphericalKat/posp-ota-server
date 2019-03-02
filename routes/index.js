@@ -135,4 +135,22 @@ router.post('/pushUpdate', auth.connect(basic),
         }
     });
 
+// delete route
+router.post('/deleteUpdate', auth.connect(basic),
+    [
+        body('hash')
+            .isLength({ min:1 })
+            .withMessage('Please enter a valid ID')
+    ],
+    (req, res) => {
+        const errors = validationResult(req);
+        if (errors.isEmpty()) {
+            Device.deleteOne({ id: req.body.hash }).then(() => {
+                res.status(200).send({ response: 'Successfully deleted update' });
+            }).catch((error) => {
+                res.status(404).send({ response: 'Update not found' });
+            });
+        }
+    });
+
 module.exports = router;

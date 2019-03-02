@@ -99,3 +99,17 @@ block content
         value="Submit"
         class="btn btn-lg btn-primary btn-block"
         )
+
+    form(action="/deleteUpdate", method="POST", class="form-updates")
+        label(for="hash") Hash of update to be deleted:
+            input(type="text"
+            id="hash"
+            name="hash"
+            class="form-control"
+            )
+
+        input(
+        type="submit"
+        value="Delete"
+        class="btn btn-lg btn-primary btn-block"
+        )
