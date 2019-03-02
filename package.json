@@ -1,0 +1,31 @@
+{
+  "name": "updates-server",
+  "version": "1.0.0",
+  "description": "A webserver for getting updates for COSP devices.",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "nodemon ./start.js",
+    "start": "node ./start.js"
+  },
+  "author": "ATechnoHazard",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "express-jwt": "^5.3.1",
+    "express-validator": "^5.3.1",
+    "http-auth": "^3.2.3",
+    "mongoose": "^5.4.6",
+    "particles.js": "^2.0.0",
+    "pug": "^2.0.3",
+    "pusher": "^2.2.0",
+    "jsonwebtoken": "latest",
+    "bcryptjs": "latest"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "nodemon": "^1.18.9"
+  }
+}
