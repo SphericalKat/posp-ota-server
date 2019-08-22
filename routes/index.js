@@ -129,47 +129,6 @@ router.post('/pushUpdate', auth.connect(basic),
             const updateDevice = new Device(req.body);
             updateDevice.save().catch(error => { console.log(error); });
             res.status(200).send({ response: 'Successfully saved' });
-            if (req.body['romtype'] == 'weekly') {
-                function update_time() {
-                    let time = new Date(req.body['datetime'] * 1000);
-                    let return_string = time.getDate() + "/" + (time.getMonth() + 1) + "/" + time.getFullYear();
-                    return return_string;
-                }
-
-                let update_text = "Update available for device " + device + ":" +
-                "\n    *Download URL:* " + "[Get the update here!](" + req.body['url'] + ")" + 
-                "\n    *Version:* " + req.body['version'] + 
-                "\n    *Date of upload:* " + update_time() +
-                "\n    *Size in megabytes:* " + (Math.round(req.body['size']/1000000)).toString() + "MB" +
-                "\n    *Release type:* " + req.body['romtype'];
-
-                let params = querystring.stringify({
-                    "chat_id": -1001270384479,
-                    "text": update_text,
-                    "parse_mode": "Markdown",
-                    "disable_web_page_preview": "yes"
-                });
-
-                const options = {
-                    host: 'api.telegram.org',
-                    port: 80,
-                    path: '/bot' + process.env.token + '/sendMessage',
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                };
-                    
-                const req = http.request(options, (res) => {});
-                   
-                req.on('error', (e) => {
-                    console.error(`problem with request: ${e.message}`);
-                });
-                    
-                // Write data to request body
-                req.write(postData);
-                req.end();
-            }
         } else {
             res.render('form', {
                 title: 'POSP Updates',
