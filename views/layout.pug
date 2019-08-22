@@ -2,15 +2,18 @@ doctype html
 html
     head
         title= `${title}`
-        link(rel='stylesheet', href='/css/bootstrap.min.css')
-        link(rel='stylesheet', href='/css/styles.css')
+        link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css')
 
 
     body
-        div.container.listing-reg
-            h1 POSP Update webserver
+        div(class='container')
+            div(class='jumbotron blue')
+                h1(class='display-4') Lucid Updater
+                p(class='lead') Use the form below to push an update.
+                hr(class='my-4')
+                p(class='lead') To delete an update, use the update's hash.
 
         block content
-
-        script(src='/particles/particles.js')
-        script(src='/particles/app.js')
+        script(src='https://code.jquery.com/jquery-3.3.1.slim.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js')
+        script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js')

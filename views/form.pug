@@ -5,111 +5,158 @@ block content
 
     -data = data || {}
 
-    if errors
-        ul.my-errors
-            for error in errors
-                li= error.msg
+    div(class="container")
+        if errors
+            ul
+                for error in errors
+                    div(class="alert alert-danger")= error.msg
 
-    div(id="particles-js" class="particles-js")
-        canvas(
-        class="particles-js-canvas-el"
-        width="1615"
-        height="881"
-        style="width: 100%; height: 100%"
-        )
+        br
+        br
+        br
+        br
+        h1(class='display-4') Push an update!
+        form(action="/api/v1/pushUpdate" method="POST")
+            div(class="form-group")
+                label(for="devicename") Device codename:
+                input(
+                    type="text"
+                    id="devicename"
+                    name="devicename"
+                    class="form-control"
+                    value=data.device
+                    aria-describedby="deviceNameHelp"
+                )
+                small(id="deviceNameHelp" class="form-text text-muted") Enter the device codename. eg: 'cheeseburger' for the OnePlus 5
 
 
-    form(action="/pushUpdate" method="POST" class="form-updates")
-        label(for="devicename") Device codename:
+            div(class="form-row")
+                div(class="col-lg")
+                    div(class="form-group")
+                        label(for="datetime") Build date:
+                        input(
+                            type="text"
+                            id="datetime"
+                            name="datetime"
+                            class="form-control"
+                            value=data.datetime
+                            placeholder="Date and time identifier, like 1565682262"
+                            aria-describedby="dateTimeHelp"
+                        )
+                        small(id="dateTimeHelp" class="form-text text-muted") Enter the date and time of the build. It should be similar to '1565682262'
+
+                div(class="col-lg")
+                    div(class="form-group")
+                        label(for="filename") File name:
+                        input(
+                            type="text"
+                            id="filename"
+                            name="filename"
+                            class="form-control"
+                            value=data.filename
+                        )
+
+
+
+            div(class="form-row")
+                div(class="col-lg-8")
+                    div(class="form-group")
+                        label(for="id") Hash:
+                        input(
+                            type="text"
+                            id="id"
+                            name="id"
+                            placeholder="5eb63bbbe01eeed093cb22bb8f5acdc3"
+                            class="form-control"
+                            value=data.id
+                        )
+
+                div(class="col-lg-4")
+                    div(class="form-group")
+                        label(for="romtype") Release type:
+                        input(
+                            type="text"
+                            id="romtype"
+                            name="romtype"
+                            class="form-control"
+                            value=data.romtype
+                        )
+
+            div(class="form-row")
+                div(class="col-lg-5")
+                    div(class="form-group")
+                        label(for="url") Download URL:
+                        input(
+                            type="text"
+                            id="url"
+                            name="url"
+                            class="form-control"
+                            value=data.url
+                        )
+
+                div(class="col-lg-3")
+                    div(class="form-group")
+                        label(for="size") Size in bytes:
+                        input(
+                            type="text"
+                            id="size"
+                            name="size"
+                            placeholder="314572800"
+                            class="form-control"
+                            value=data.size
+                        )
+                div(class="col-lg-4")
+                    div(class="form-group")
+                        label(for="version") Version:
+                        input(
+                            type="text"
+                            id="version"
+                            name="version"
+                            class="form-control"
+                            value=data.version
+                        )
+
             input(
-            type="text"
-            id="devicename"
-            name="devicename"
-            class="form-control"
-            value=data.device
+                type="submit"
+                value="Submit"
+                class="btn btn-primary"
             )
 
-        label(for="datetime") Build date:
+
+
+
+
+        br
+        br
+        hr(class='my-4')
+        br
+        br
+        h1(class="display-4") Delete updates
+
+        form(action="/api/v1/deleteUpdate", method="POST")
+            div(class="form-group")
+                label(for="hash") Hash of update to be deleted:
+
+                input(type="text"
+                    id="hash"
+                    name="hash"
+                    class="form-control"
+                )
+
             input(
-            type="text"
-            id="datetime"
-            name="datetime"
-            class="form-control"
-            value=data.datetime
+                type="submit"
+                value="Delete"
+                class="btn btn-primary mb-100"
             )
 
-        label(for="filename") File name:
-            input(
-                type="text"
-                id="filename"
-                name="filename"
-                class="form-control"
-                value=data.filename
-            )
+        br
+        br
+        br
+        br
 
-        label(for="id") Hash:
-            input(
-            type="text"
-            id="id"
-            name="id"
-            class="form-control"
-            value=data.id
-            )
-
-
-        label(for="romtype") Release type:
-            input(
-            type="text"
-            id="romtype"
-            name="romtype"
-            class="form-control"
-            value=data.romtype
-            )
-
-        label(for="size") Size:
-            input(
-            type="text"
-            id="size"
-            name="size"
-            class="form-control"
-            value=data.size
-            )
-
-        label(for="url") Download URL:
-            input(
-            type="text"
-            id="url"
-            name="url"
-            class="form-control"
-            value=data.url
-            )
-
-        label(for="version") Version:
-            input(
-            type="text"
-            id="version"
-            name="version"
-            class="form-control"
-            value=data.version
-            )
-
-
-        input(
-        type="submit"
-        value="Submit"
-        class="btn btn-lg btn-primary btn-block"
-        )
-
-    form(action="/deleteUpdate", method="POST", class="form-updates")
-        label(for="hash") Hash of update to be deleted:
-            input(type="text"
-            id="hash"
-            name="hash"
-            class="form-control"
-            )
-
-        input(
-        type="submit"
-        value="Delete"
-        class="btn btn-lg btn-primary btn-block"
-        )
+        div(class="card-footer font-small pt-4")
+            div(class="container-fluid text-center text-md-left")
+                div(class="col-md-6 mt-md-0 mt-3")
+                    h1(class='display-4') Lucid Upd00ter
+                    p(class="lead") Not perfect, but nice anyway :3
+            div(class="footer-copyright text-center py-3") Made with UwU by SphericalKat

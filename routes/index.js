@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const auth = require('http-auth');
-const {body, validationResult} = require('express-validator/check');
+const {check, validationResult} = require('express-validator');
 const router = express.Router();
 const Device = mongoose.model('Device');
 const basic = auth.basic({
@@ -56,10 +56,20 @@ router.get('/', auth.connect(basic), (req, res) => {
  *  }
  *
  */
-router.get('/checkUpdate', async (req, res) => {
-    console.log(req);
-    const reqDevice = req.query.device;
-    const channelType = req.query.type;
+router.get('/:device/:type',[
+    check('device').isString().not().isEmpty(),
+    check('type').isString().not().isEmpty()
+
+], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(422).send({
+            status: "ValidationFailed",
+            err: errors.array()
+        });
+    }
+
+    const {device: reqDevice, type: channelType} = req.params;
     let returnJson = [];
     try {
         await Device.find({devicename: reqDevice, romtype: channelType}, async (err, devices) => {
@@ -94,30 +104,30 @@ router.get('/checkUpdate', async (req, res) => {
 // Submit route
 router.post('/pushUpdate', auth.connect(basic),
     [
-        body('devicename')
+        check('devicename')
             .isLength({min: 1})
             .withMessage('Please enter the device name.'),
-        body('datetime')
+        check('datetime')
             .isLength({min: 1})
             .isNumeric()
             .withMessage('Please enter the datetime.'),
-        body('filename')
+        check('filename')
             .isLength({min: 1})
             .withMessage('Please enter the file name'),
-        body('id')
+        check('id')
             .isLength({min: 1})
             .withMessage('Please enter the id.'),
-        body('romtype')
+        check('romtype')
             .isLength({min: 1})
             .withMessage('Please enter the release type'),
-        body('size')
+        check('size')
             .isLength({min: 1})
             .isNumeric()
             .withMessage('Please enter the file size.'),
-        body('url')
+        check('url')
             .isURL({require_valid_protocol: true})
             .withMessage('Please enter a valid URL'),
-        body('version')
+        check('version')
             .isLength({min: 1})
             .withMessage('Please enter the version.'),
     ],
@@ -128,7 +138,7 @@ router.post('/pushUpdate', auth.connect(basic),
             updateDevice.save().catch(error => {
                 console.log(error);
             });
-            res.status(200).send({response: 'Successfully saved'});
+            res.status(200).send({response: 'Successfully saved', err: null});
         } else {
             res.render('form', {
                 title: 'Lucid Updates',
@@ -141,7 +151,7 @@ router.post('/pushUpdate', auth.connect(basic),
 // delete route
 router.post('/deleteUpdate', auth.connect(basic),
     [
-        body('hash')
+        check('hash')
             .isLength({min: 1})
             .withMessage('Please enter a valid ID')
     ],
@@ -149,9 +159,9 @@ router.post('/deleteUpdate', auth.connect(basic),
         const errors = validationResult(req);
         if (errors.isEmpty()) {
             Device.delete({id: req.body.hash}).then(() => {
-                res.status(200).send({response: 'Successfully deleted update'});
+                res.status(200).send({response: 'Successfully deleted update', err: null});
             }).catch((error) => {
-                res.status(404).send({response: 'Update not found'});
+                res.status(404).send({response: 'Update not found', err: error});
             });
         }
     });
