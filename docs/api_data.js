@@ -18,10 +18,10 @@ define({ "api": [
           },
           {
             "group": "Parameter",
-            "type": "String",
+            "type": "Number",
             "optional": false,
-            "field": "type",
-            "description": "<p>The build type. Also returned in the response.</p>"
+            "field": "date",
+            "description": "<p>The build date in the format &quot;yymmdd&quot;</p>"
           }
         ]
       }
@@ -90,7 +90,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "{\n    \"response\": [\n        {\n            \"datetime\": 1551462180,\n            \"filename\": \"potato_beryllium-9-20190302.Baked-v2.1.WEEKLY.zip\",\n            \"id\": \"6f115c557c665548978795c84791c9c0\",\n            \"romtype\": \"weekly\",\n            \"size\": 528541416,\n            \"url\": \"https://mirror.potatoproject.co/beryllium/weeklies/potato_beryllium-9-20190302.Baked-v2.1.WEEKLY.zip\",\n            \"version\": \"2.1\"\n        }\n    ]\n}",
+          "content": "{\n    \"response\": [\n        {\n            \"datetime\": 1551462180,\n            \"filename\": \"project_beryllium-9-20190302.test-v2.1.WEEKLY.zip\",\n            \"id\": \"6f115c557c665548978795c84791c9c0\",\n            \"romtype\": \"weekly\",\n            \"size\": 528541416,\n            \"url\": \"https://mirror.project.co/beryllium/weeklies/project_beryllium-9-20190302.test-v2.1.WEEKLY.zip\",\n            \"version\": \"2.1\"\n        }\n    ]\n}",
           "type": "json"
         }
       ]

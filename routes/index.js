@@ -2,10 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
-const http = require('http');
-const querystring = require("querystring")
 const auth = require('http-auth');
-const { body, validationResult } = require('express-validator/check');
+const {body, validationResult} = require('express-validator/check');
 const router = express.Router();
 const Device = mongoose.model('Device');
 const basic = auth.basic({
@@ -13,14 +11,14 @@ const basic = auth.basic({
 });
 
 router.get('/', auth.connect(basic), (req, res) => {
-    res.render('form', { title: 'POSP Updates'});
+    res.render('form', {title: 'Lucid Updates'});
 });
 
 /**
  * @api {get} /checkUpdate Check if update exists
  * @apiName GetCheckUpdate
  * @apiGroup Update
- * @apiVersion 1.0
+ * @apiVersion 1.0.0
  *
  * @apiParam {String} device The user's device
  * @apiParam {Number} date The build date in the format "yymmdd"
@@ -40,11 +38,11 @@ router.get('/', auth.connect(basic), (req, res) => {
     "response": [
         {
             "datetime": 1551462180,
-            "filename": "potato_beryllium-9-20190302.Baked-v2.1.WEEKLY.zip",
+            "filename": "project_beryllium-9-20190302.test-v2.1.WEEKLY.zip",
             "id": "6f115c557c665548978795c84791c9c0",
             "romtype": "weekly",
             "size": 528541416,
-            "url": "https://mirror.potatoproject.co/beryllium/weeklies/potato_beryllium-9-20190302.Baked-v2.1.WEEKLY.zip",
+            "url": "https://mirror.project.co/beryllium/weeklies/project_beryllium-9-20190302.test-v2.1.WEEKLY.zip",
             "version": "2.1"
         }
     ]
@@ -97,41 +95,43 @@ router.get('/checkUpdate', async (req, res) => {
 router.post('/pushUpdate', auth.connect(basic),
     [
         body('devicename')
-            .isLength({ min: 1 })
+            .isLength({min: 1})
             .withMessage('Please enter the device name.'),
         body('datetime')
-            .isLength({ min: 1 })
+            .isLength({min: 1})
             .isNumeric()
             .withMessage('Please enter the datetime.'),
         body('filename')
-            .isLength({ min: 1 })
+            .isLength({min: 1})
             .withMessage('Please enter the file name'),
         body('id')
-            .isLength({ min: 1 })
+            .isLength({min: 1})
             .withMessage('Please enter the id.'),
         body('romtype')
-            .isLength({ min:1 })
+            .isLength({min: 1})
             .withMessage('Please enter the release type'),
         body('size')
-            .isLength({ min: 1 })
+            .isLength({min: 1})
             .isNumeric()
             .withMessage('Please enter the file size.'),
         body('url')
-            .isURL({ require_valid_protocol: true })
+            .isURL({require_valid_protocol: true})
             .withMessage('Please enter a valid URL'),
         body('version')
-            .isLength({ min: 1 })
+            .isLength({min: 1})
             .withMessage('Please enter the version.'),
     ],
     (req, res) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
             const updateDevice = new Device(req.body);
-            updateDevice.save().catch(error => { console.log(error); });
-            res.status(200).send({ response: 'Successfully saved' });
+            updateDevice.save().catch(error => {
+                console.log(error);
+            });
+            res.status(200).send({response: 'Successfully saved'});
         } else {
             res.render('form', {
-                title: 'POSP Updates',
+                title: 'Lucid Updates',
                 errors: errors.array(),
                 data: req.body
             });
@@ -142,16 +142,16 @@ router.post('/pushUpdate', auth.connect(basic),
 router.post('/deleteUpdate', auth.connect(basic),
     [
         body('hash')
-            .isLength({ min:1 })
+            .isLength({min: 1})
             .withMessage('Please enter a valid ID')
     ],
     (req, res) => {
         const errors = validationResult(req);
         if (errors.isEmpty()) {
-            Device.deleteOne({ id: req.body.hash }).then(() => {
-                res.status(200).send({ response: 'Successfully deleted update' });
+            Device.delete({id: req.body.hash}).then(() => {
+                res.status(200).send({response: 'Successfully deleted update'});
             }).catch((error) => {
-                res.status(404).send({ response: 'Update not found' });
+                res.status(404).send({response: 'Update not found'});
             });
         }
     });
